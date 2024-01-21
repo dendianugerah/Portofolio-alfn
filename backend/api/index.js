@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const app = express();
 const { Pool } = require("pg");
 const cors = require("cors");
-const path = require('path');
+const path = require("path");
 const multer = require("multer");
 const nodemailer = require("nodemailer");
 
@@ -41,6 +41,11 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use("/upload_project", express.static("uploads"));
 app.use("/upload_file", express.static("uploads"));
+
+app.use("/", (req, res, next) => {
+  console.log("Time:", Date.now());
+  next();
+});
 
 app.get("/upload_project/:filename", (req, res) => {
   const filename = req.params.filename;
@@ -184,7 +189,8 @@ app.get("/certificate/detail/:id", (req, res) => {
     }
 
     // Check if data is found
-    if (results.rows.length === 0) { // Use results.rows instead of results
+    if (results.rows.length === 0) {
+      // Use results.rows instead of results
       res.status(404).json({ error: "Certificate not found" });
     } else {
       res.json(results.rows[0]); // Use results.rows instead of results
@@ -203,7 +209,7 @@ app.post("/certificate", upload.single("upload_file"), (req, res) => {
         res.status(500).json({ error: err.message });
         return;
       }
-      res.json({ message: "Certificate Submit", id: result.rows[0].id }); 
+      res.json({ message: "Certificate Submit", id: result.rows[0].id });
     }
   );
 });
