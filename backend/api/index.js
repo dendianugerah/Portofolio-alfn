@@ -367,6 +367,8 @@ app.post("/login", (req, res) => {
   });
 });
 
+app.use("./netlify/api/index", router);
+
 app.listen(4000, () => {
   console.log("Server berhasil dirunning di port 4000");
 });
